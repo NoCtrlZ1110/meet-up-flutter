@@ -1,0 +1,13 @@
+name: wemapgl_platform_interface
+description: A common platform interface for the wemapgl plugin.
+version: 0.1.0
+homepage: https://github.com/WEMAP-Official/WeMap-Flutter-SDK
+
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: ^1.3.0
+  http: ^0.13.2
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
