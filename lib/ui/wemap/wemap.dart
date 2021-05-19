@@ -11,6 +11,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+import 'package:wemapgl/wemapgl.dart' as WEMAP;
+import '../examples/full_map.dart';
 
 class WeMap extends StatefulWidget {
   @override
@@ -26,6 +30,11 @@ class _WeMapState extends State<WeMap> {
   @override
   void initState() {
     super.initState();
+    final location = Location();
+    final hasPermissions =location.hasPermission();
+    if (hasPermissions != PermissionStatus.granted) {
+      location.requestPermission();
+    }
   }
 
   @override
@@ -128,7 +137,7 @@ class _WeMapState extends State<WeMap> {
   }
 
   Widget _buildListView() {
-    return Container(child: Text("WeMap goes here!"),);
+    return Container(child: FullMapPage(),);
   }
 
 
