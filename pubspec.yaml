@@ -112,6 +112,18 @@ flutter:
   - assets/images/
   - assets/icons/
   - assets/lang/
+  - assets/symbols/custom-icon.png
+  - assets/symbols/origin.png
+  - assets/symbols/destination.png
+  - assets/symbols/2.0x/custom-icon.png
+  - assets/symbols/2.0x/origin.png
+  - assets/symbols/2.0x/destination.png
+  - assets/symbols/3.0x/custom-icon.png
+  - assets/symbols/3.0x/origin.png
+  - assets/symbols/3.0x/destination.png
+  - assets/geojson/ne_10m_ports.geojson
+  - assets/geojson/line-samples.geojson
+  - assets/geojson/polygon-samples.geojson
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
