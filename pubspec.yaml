@@ -15,8 +15,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  wemapgl_platform_interface:
-    path: ./wemapgl_platform_interface
+  location: ^4.1.1
+  weather_icons: ^2.0.2
+  connectivity: ^3.0.3
+  fluttertoast: ^8.0.6
 
   flutter_localizations:
     sdk: flutter
@@ -75,6 +77,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  wemapgl:
+    path: ./wemap/
 
   # The following adds the launcher icon support to your application.
   # run below mentioned commands to generate launcher icons
