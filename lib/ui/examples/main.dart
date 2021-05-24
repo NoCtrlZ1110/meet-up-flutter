@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:wemapgl/wemapgl.dart' as WEMAP;
-import 'package:wemapgl_example/full_map.dart';
+import 'full_map.dart';
 
 import 'animate_camera.dart';
 import 'ePage.dart';

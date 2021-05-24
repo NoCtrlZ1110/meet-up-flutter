@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/ui/examples/main.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -137,7 +138,7 @@ class _WeMapState extends State<WeMap> {
   }
 
   Widget _buildListView() {
-    return Container(child: FullMapPage(),);
+    return Container(child: MapsDemo(),);
   }
 
 
