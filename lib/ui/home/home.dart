@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       title: Text("MeetUp"),
       actions: _buildActions(context),
-      backgroundColor: Colors.cyan,
+      backgroundColor: Colors.white,
     );
   }
 
