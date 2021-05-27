@@ -79,7 +79,7 @@ class DirectionAPIState extends State<DirectionAPI> {
 
     final json = await directionAPI.getResponseMultiRoute(0, points); //0 = car, 1 = bike, 2 = foot
     List<LatLng> _route = directionAPI.getRoute(json);
-    List<LatLng> _waypoins = directionAPI.getWayPoints(json);
+    List<LatLng> _waypoint = directionAPI.getWayPoints(json);
 
     setState(() {
       _tripDistance = directionAPI.getDistance(json);
@@ -95,10 +95,10 @@ class DirectionAPIState extends State<DirectionAPI> {
       ),
     );
     await mapController.addCircle(
-        CircleOptions(geometry: _waypoins[0], circleRadius: 8.0, circleColor: '#d3d3d3', circleStrokeWidth: 1.5, circleStrokeColor: '#0071bc'));
-    for (int i = 1; i < _waypoins.length; i++) {
+        CircleOptions(geometry: _waypoint[0], circleRadius: 8.0, circleColor: '#d3d3d3', circleStrokeWidth: 1.5, circleStrokeColor: '#0071bc'));
+    for (int i = 1; i < _waypoint.length; i++) {
       await mapController.addCircle(
-          CircleOptions(geometry: _waypoins[i], circleRadius: 8.0, circleColor: '#ffffff', circleStrokeWidth: 1.5, circleStrokeColor: '#0071bc'));
+          CircleOptions(geometry: _waypoint[i], circleRadius: 8.0, circleColor: '#ffffff', circleStrokeWidth: 1.5, circleStrokeColor: '#0071bc'));
     }
   }
 }
