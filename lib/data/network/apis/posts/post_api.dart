@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
+import 'package:boilerplate/models/location/NearbyLocation.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:injectable/injectable.dart';
 
@@ -28,7 +29,17 @@ class PostApi {
     }
   }
 
-/// sample api call with default rest client
+  Future<NearbyLocation> getPlaces(position) async {
+    try {
+      final res = await _dioClient.get(Endpoints.getNearbyPlaces(position));
+      return NearbyLocation.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  /// sample api call with default rest client
 //  Future<PostsList> getPosts() {
 //
 //    return _restClient

@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:boilerplate/ui/meetup/meetmid.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'dart:async';
 import 'package:wemapgl/wemapgl.dart';
 
 class MeetUp extends StatefulWidget {
@@ -15,7 +16,7 @@ class MeetUp extends StatefulWidget {
 class _MeetUpState extends State<MeetUp> {
   WeMapSearchAPI searchAPI = WeMapSearchAPI();
   Timer? t, t2;
-  bool b = false , b2 = false;
+  bool b = false, b2 = false;
   WeMapPlace yourLocation = new WeMapPlace();
   WeMapPlace friendLocation = new WeMapPlace();
   List<WeMapPlace> result = [];
@@ -171,21 +172,34 @@ class _MeetUpState extends State<MeetUp> {
           SizedBox(
             height: 30,
           ),
-          TextButton(
+          OutlinedButton(
             onPressed: () {
-              if ( b&&b2 ) {
+              if (b && b2) {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => MeetMid(
                         yourLocation: yourLocation,
                         friendLocation: friendLocation)));
               }
             },
-            child: Text(
-              "Let's meet up",
-              style: TextStyle(color: Colors.white, fontSize: 18),
+            child: Container(
+              width: 132,
+              child: Row(
+                children: [
+                  Text(
+                    "Let's ",
+                    style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Image.asset(
+                    "assets/images/app_name.png",
+                    height: 30,
+                  ),
+                ],
+              ),
             ),
-            style: TextButton.styleFrom(
-                backgroundColor: b&&b2 ? Colors.cyan : Colors.grey,
+            style: OutlinedButton.styleFrom(
                 padding: EdgeInsets.all(15),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0))),
