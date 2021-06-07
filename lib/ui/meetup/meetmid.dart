@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -140,21 +141,28 @@ class _MeetMidState extends State<MeetMid> {
     final SharedPreferences prefs = await _prefs;
     final List<String>? places = prefs.getStringList("saved_places");
     if (places != null) {
-      places.add(jsonEncode(item));
-      prefs.setStringList("saved_places", places);
+      bool check = true;
+      for (int i = 0; i < places.length; i++) {
+        if (Items.fromJson(jsonDecode(places[i])).id == item.id) {
+          check = false;
+        }
+      }
+      if (check) {
+        places.add(jsonEncode(item));
+        prefs.setStringList("saved_places", places);
+      }
     } else {
       prefs.setStringList("saved_places", [jsonEncode(item)]);
     }
+    Fluttertoast.showToast(
+      msg: "Added to your favorite places",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.white,
+      textColor: Color(0xFF48BF92),
+    );
     print('saved');
-  }
-
-  Future<void> getPlaces() async {
-    final SharedPreferences prefs = await _prefs;
-    final List<String> places = prefs.getStringList("saved_places")!;
-    List<Items> items =
-        places.map((e) => Items.fromJson(jsonDecode(e))).toList();
-    print('got');
-    print(items.map((e) => e.title).toString());
   }
 
   void showTheWay(Items item, BuildContext context) {
@@ -173,8 +181,6 @@ class _MeetMidState extends State<MeetMid> {
                     description: item.vicinity),
               ),
             )));
-
-    // save here!
   }
 
   @override
