@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:wemapgl/wemapgl.dart';
 
@@ -33,12 +34,14 @@ class MeetMid extends StatefulWidget {
 }
 
 class _MeetMidState extends State<MeetMid> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final WeMapPlace yourLocation, friendLocation;
   final WeMapPlace midLocation;
   WeMapController? mapController;
   bool myLatLngEnabled = true;
   late List<Items> nearbylocations;
   WeMapDirections directionAPI = WeMapDirections();
+
   int _tripDistance = 0;
   int _tripTime = 0;
 
@@ -133,8 +136,25 @@ class _MeetMidState extends State<MeetMid> {
         subject: "Let's meet up!");
   }
 
-  void saveLocation(Items item) {
-    // save here!
+  Future<void> savePlace(Items item) async {
+    final SharedPreferences prefs = await _prefs;
+    final List<String>? places = prefs.getStringList("saved_places");
+    if (places != null) {
+      places.add(jsonEncode(item));
+      prefs.setStringList("saved_places", places);
+    } else {
+      prefs.setStringList("saved_places", [jsonEncode(item)]);
+    }
+    print('saved');
+  }
+
+  Future<void> getPlaces() async {
+    final SharedPreferences prefs = await _prefs;
+    final List<String> places = prefs.getStringList("saved_places")!;
+    List<Items> items =
+        places.map((e) => Items.fromJson(jsonDecode(e))).toList();
+    print('got');
+    print(items.map((e) => e.title).toString());
   }
 
   void showTheWay(Items item, BuildContext context) {
@@ -232,7 +252,9 @@ class _MeetMidState extends State<MeetMid> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                savePlace(nearbylocations[index]);
+                              },
                               child: Icon(
                                 Icons.favorite,
                                 color: Colors.pink,
