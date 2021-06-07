@@ -131,8 +131,8 @@ class ChooseLocationState extends State<ChooseLocation> with SingleTickerProvide
   @override
   void initState() {
     super.initState();
-    location1 = originHint;
-    location2 = destinationHint;
+    location1 = widget.originPlace != null ? widget.originPlace!.placeName! : originHint;
+    location2 = widget.destinationPlace != null ? widget.destinationPlace!.placeName! :destinationHint;
   }
 
   BoxDecoration _containerDecoration() {

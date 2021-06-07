@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:wemapgl/wemapgl.dart';
 
@@ -119,13 +120,42 @@ class _MeetMidState extends State<MeetMid> {
   }
 
   Widget buildDragIcon() => Container(
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        width: 40,
-        height: 8,
-      );
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      width: 80,
+      height: 4);
+
+  void shareLocation(Items item) {
+    Share.share("We will meet here: ${item.title} , ${item.vicinity} ",
+        subject: "Let's meet up!");
+  }
+
+  void saveLocation(Items item) {
+    // save here!
+  }
+
+  void showTheWay(Items item, BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Scaffold(
+              body: WeMapDirection(
+                originIcon: "assets/symbols/origin.png",
+                destinationIcon: "assets/symbols/destination.png",
+                originPlace: yourLocation,
+                // destinationPlace: friendLocation,
+                destinationPlace: new WeMapPlace(
+                    location: new LatLng(
+                        item.position.elementAt(0), item.position.elementAt(1)),
+                    placeName: item.title,
+                    street: item.vicinity,
+                    description: item.vicinity),
+              ),
+            )));
+
+    // save here!
+  }
 
   @override
   void initState() {
@@ -151,10 +181,11 @@ class _MeetMidState extends State<MeetMid> {
     return Scaffold(
       body: SlidingUpPanel(
         parallaxEnabled: true,
-        minHeight: 250,
+        minHeight: 230,
         maxHeight: 550,
         panel: Column(
           children: [
+            buildDragIcon(),
             SlidingUpTittle(),
             YourLocationInfo(yourLocation: yourLocation),
             FriendLocationInfo(friendLocation: friendLocation),
@@ -175,7 +206,7 @@ class _MeetMidState extends State<MeetMid> {
                     margin: EdgeInsets.all(20),
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                        color: Colors.cyan,
+                        color: Color(0xFF48BF92),
                         borderRadius: BorderRadius.circular(10)),
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: Column(
@@ -202,41 +233,39 @@ class _MeetMidState extends State<MeetMid> {
                           children: [
                             ElevatedButton(
                               onPressed: () {},
-                              child: Text(
-                                "Save",
-                                style: TextStyle(color: Colors.white),
+                              child: Icon(
+                                Icons.favorite,
+                                color: Colors.pink,
                               ),
                               style: TextButton.styleFrom(
-                                  backgroundColor: Colors.cyan),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Show the ways",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.cyan),
+                                  backgroundColor: Colors.white),
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                fetchNearbyPlaces(LatLng(
-                                        (yourLocation.location!.latitude +
-                                                friendLocation
-                                                    .location!.latitude) /
-                                            2,
-                                        (yourLocation.location!.longitude +
-                                                friendLocation
-                                                    .location!.longitude) /
-                                            2))
-                                    .then((value) => print(value.items));
+                                showTheWay(nearbylocations[index], context);
                               },
-                              child: Text(
-                                "Share",
-                                style: TextStyle(color: Colors.white),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Get here ",
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
+                                  Icon(Icons.directions, color: Colors.blue)
+                                ],
                               ),
                               style: TextButton.styleFrom(
-                                  backgroundColor: Colors.cyan),
+                                  backgroundColor: Colors.white),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                shareLocation(nearbylocations[index]);
+                              },
+                              child: Icon(
+                                Icons.share,
+                                color: Color(0xFF48BF92),
+                              ),
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.white),
                             ),
                           ],
                         )
@@ -252,7 +281,7 @@ class _MeetMidState extends State<MeetMid> {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-                height: 510,
+                height: MediaQuery.of(context).size.height * 0.75,
                 child: WeMap(
                   onMapCreated: _onMapCreated,
                   initialCameraPosition:
@@ -278,8 +307,8 @@ class SlidingUpTittle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Image.asset(
-        "assets/images/sliding_title.png",
-        width: 300,
+        "assets/images/app_name.png",
+        width: 100,
       ),
     );
   }

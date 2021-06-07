@@ -3,7 +3,8 @@ part of wemapgl;
 WeMapStream<bool> visibleStream = WeMapStream<bool>();
 WeMapStream<int> timeStream = WeMapStream<int>();
 WeMapStream<int> distanceStream = WeMapStream<int>();
-WeMapStream<List<InstructionRoute>> insRouteStream = WeMapStream<List<InstructionRoute>>();
+WeMapStream<List<InstructionRoute>> insRouteStream =
+    WeMapStream<List<InstructionRoute>>();
 WeMapStream<int> indexStream = WeMapStream<int>();
 WeMapStream<List<LatLng>> routeStream = WeMapStream<List<LatLng>>();
 WeMapStream<List<LatLng>> routePreviewStream = WeMapStream<List<LatLng>>();
@@ -37,7 +38,8 @@ class WeMapDirections {
     return json;
   }
 
-  Future<dynamic> getResponseMultiRoute(int indexOfTab, List<LatLng> points) async {
+  Future<dynamic> getResponseMultiRoute(
+      int indexOfTab, List<LatLng> points) async {
     if (points.length >= 2) {
       late String url;
       switch (indexOfTab) {
@@ -65,7 +67,10 @@ class WeMapDirections {
 
   List<LatLng> getRoute(json) {
     List<LatLng> _route = [];
-    if (json != null && json['message'] == null && !json['paths'].isEmpty && !json['paths'][0]['points'].isEmpty) {
+    if (json != null &&
+        json['message'] == null &&
+        !json['paths'].isEmpty &&
+        !json['paths'][0]['points'].isEmpty) {
       _route.clear();
       json['paths'][0]['points']['coordinates'].forEach((item) {
         if (item is List) {
@@ -79,7 +84,10 @@ class WeMapDirections {
 
   List<LatLng> getWayPoints(json) {
     List<LatLng> _route = [];
-    if (json != null && json['message'] == null && !json['paths'].isEmpty && !json['paths'][0]['points'].isEmpty) {
+    if (json != null &&
+        json['message'] == null &&
+        !json['paths'].isEmpty &&
+        !json['paths'][0]['points'].isEmpty) {
       _route.clear();
       json['paths'][0]['snapped_waypoints']['coordinates'].forEach((item) {
         if (item is List) {
@@ -93,7 +101,10 @@ class WeMapDirections {
 
   int getDistance(dynamic json) {
     int _tripDistance = 0;
-    if (json != null && json['message'] == null && !json['paths'].isEmpty && json['paths'][0]['distance'] != null) {
+    if (json != null &&
+        json['message'] == null &&
+        !json['paths'].isEmpty &&
+        json['paths'][0]['distance'] != null) {
       _tripDistance = json['paths'][0]['distance'].toInt();
     }
     return _tripDistance;
@@ -101,7 +112,10 @@ class WeMapDirections {
 
   int getTime(dynamic json) {
     int time = 0;
-    if (json != null && json['message'] == null && !json['paths'].isEmpty && json['paths'][0]['time'] != null) {
+    if (json != null &&
+        json['message'] == null &&
+        !json['paths'].isEmpty &&
+        json['paths'][0]['time'] != null) {
       time = json['paths'][0]['time'];
     }
     return time;
@@ -109,13 +123,19 @@ class WeMapDirections {
 
   List<InstructionRoute> getInstructionRoute(dynamic json) {
     List<InstructionRoute> insRoute = [];
-    if (json != null && json['message'] == null && !json['paths'].isEmpty && json['paths'][0]['instructions'] != null) {
-      insRoute = (json['paths'][0]['instructions'] as List).map((i) => InstructionRoute.fromJson(i)).toList();
+    if (json != null &&
+        json['message'] == null &&
+        !json['paths'].isEmpty &&
+        json['paths'][0]['instructions'] != null) {
+      insRoute = (json['paths'][0]['instructions'] as List)
+          .map((i) => InstructionRoute.fromJson(i))
+          .toList();
     }
     return insRoute;
   }
 
-  List<LatLng> getRoutePreview(List<LatLng> _route, List<InstructionRoute> insRoute) {
+  List<LatLng> getRoutePreview(
+      List<LatLng> _route, List<InstructionRoute> insRoute) {
     List<LatLng> routePreview = [];
     insRoute.map((ins) {
       List interval = ins.interval;
@@ -125,8 +145,15 @@ class WeMapDirections {
     return routePreview;
   }
 
-  Future<void> loadRoute(WeMapController mapController, List<LatLng> _route, List<InstructionRoute> insRoute, List<LatLng> rootPreview, bool visible,
-      int indexOfTab, String from, String to) async {
+  Future<void> loadRoute(
+      WeMapController mapController,
+      List<LatLng> _route,
+      List<InstructionRoute> insRoute,
+      List<LatLng> rootPreview,
+      bool visible,
+      int indexOfTab,
+      String from,
+      String to) async {
     final json = await getResponse(indexOfTab, from, to);
     _route = getRoute(json);
     _tripDistance = getDistance(json);
@@ -149,10 +176,18 @@ class WeMapDirections {
           lineOpacity: 1,
         ),
       );
-      await mapController.addCircle(
-          CircleOptions(geometry: _route[0], circleRadius: 8.0, circleColor: '#d3d3d3', circleStrokeWidth: 1.5, circleStrokeColor: '#0071bc'));
       await mapController.addCircle(CircleOptions(
-          geometry: _route[_route.length - 1], circleRadius: 8.0, circleColor: '#ffffff', circleStrokeWidth: 1.5, circleStrokeColor: '#0071bc'));
+          geometry: _route[0],
+          circleRadius: 8.0,
+          circleColor: '#d3d3d3',
+          circleStrokeWidth: 1.5,
+          circleStrokeColor: '#0071bc'));
+      await mapController.addCircle(CircleOptions(
+          geometry: _route[_route.length - 1],
+          circleRadius: 8.0,
+          circleColor: '#ffffff',
+          circleStrokeWidth: 1.5,
+          circleStrokeColor: '#0071bc'));
     }
   }
 
@@ -163,19 +198,26 @@ class WeMapDirections {
     } else if (time >= 30000 && time < 1800000) {
       string = ((time ~/ 500) ~/ 60).toString() + ' ' + minuteText;
     } else if (time >= 1800000 && time < 43200000) {
-      string =
-          ((time ~/ 500) ~/ 3600).toString() + ' ' + hourText + ' ' + ((((time ~/ 500) % 3600) / 3600) * 60).toInt().toString() + ' ' + minuteText;
+      string = ((time ~/ 500) ~/ 3600).toString() +
+          ' ' +
+          hourText +
+          ' ' +
+          ((((time ~/ 500) % 3600) / 3600) * 60).toInt().toString() +
+          ' ' +
+          minuteText;
     } else if (time >= 43200000) {
       string = ((time ~/ 500) ~/ 3600).toString() + ' ' + hourText;
     }
     return string;
   }
 
-  Future<void> animatedCamera(WeMapController? mapController, LatLngBounds bounds) async {
+  Future<void> animatedCamera(
+      WeMapController? mapController, LatLngBounds bounds) async {
     await mapController?.animateCamera(CameraUpdate.newLatLngBounds(bounds));
   }
 
-  Future<void> addMarker(LatLng? latLng, WeMapController? mapController, String? iconImage) async {
+  Future<void> addMarker(
+      LatLng? latLng, WeMapController? mapController, String? iconImage) async {
     await mapController?.addSymbol(SymbolOptions(
       geometry: latLng, // location is 0.0 on purpose for this example
       iconImage: iconImage,
@@ -183,19 +225,30 @@ class WeMapDirections {
     ));
   }
 
-  Future<void> addCircle(LatLng? latLng, WeMapController? mapController, String? color) async {
-    await mapController
-        ?.addCircle(CircleOptions(geometry: latLng, circleRadius: 8.0, circleColor: color, circleStrokeWidth: 1.5, circleStrokeColor: '#0071bc'));
+  Future<void> addCircle(
+      LatLng? latLng, WeMapController? mapController, String? color) async {
+    await mapController?.addCircle(CircleOptions(
+        geometry: latLng,
+        circleRadius: 8.0,
+        circleColor: color,
+        circleStrokeWidth: 1.5,
+        circleStrokeColor: '#0071bc'));
   }
 
   LatLngBounds routeBounds(LatLng from, LatLng to) {
     late LatLngBounds bounds;
-    if (from.latitude <= to.latitude && from.longitude <= to.longitude) bounds = LatLngBounds(southwest: from, northeast: to);
-    if (to.latitude <= from.latitude && to.longitude <= from.longitude) bounds = LatLngBounds(southwest: to, northeast: from);
+    if (from.latitude <= to.latitude && from.longitude <= to.longitude)
+      bounds = LatLngBounds(southwest: from, northeast: to);
+    if (to.latitude <= from.latitude && to.longitude <= from.longitude)
+      bounds = LatLngBounds(southwest: to, northeast: from);
     if (from.latitude <= to.latitude && from.longitude >= to.longitude)
-      bounds = LatLngBounds(southwest: LatLng(from.latitude, to.longitude), northeast: LatLng(to.latitude, from.longitude));
+      bounds = LatLngBounds(
+          southwest: LatLng(from.latitude, to.longitude),
+          northeast: LatLng(to.latitude, from.longitude));
     if (from.latitude >= to.latitude && from.longitude <= to.longitude)
-      bounds = LatLngBounds(southwest: LatLng(to.latitude, from.longitude), northeast: LatLng(from.latitude, to.longitude));
+      bounds = LatLngBounds(
+          southwest: LatLng(to.latitude, from.longitude),
+          northeast: LatLng(from.latitude, to.longitude));
     return bounds;
   }
 }
@@ -206,7 +259,11 @@ class WeMapDirection extends StatefulWidget {
   final WeMapPlace? originPlace;
   final WeMapPlace? destinationPlace;
 
-  WeMapDirection({this.originIcon, this.destinationIcon, this.originPlace, this.destinationPlace});
+  WeMapDirection(
+      {this.originIcon,
+      this.destinationIcon,
+      this.originPlace,
+      this.destinationPlace});
 
   @override
   State createState() => WeMapDirectionState();
@@ -244,48 +301,67 @@ class WeMapDirectionState extends State<WeMapDirection> {
   }
 
   Future<void> onSelected() async {
-    if (myLatLng == null && mapController != null) myLatLng = await mapController!.requestMyLocationLatLng();
+    if (myLatLng == null && mapController != null)
+      myLatLng = await mapController!.requestMyLocationLatLng();
     fromHomeStream.increment(false);
-    if ((_originPlace == null && _chooseKey.currentState != null && _chooseKey.currentState!.ori != null) ||
+    if ((_originPlace == null &&
+            _chooseKey.currentState != null &&
+            _chooseKey.currentState!.ori != null) ||
         (_originPlace != null && _chooseKey.currentState!.ori != null)) {
-      _originPlace = WeMapPlace(location: _chooseKey.currentState!.ori, description: _chooseKey.currentState!.location1);
+      _originPlace = WeMapPlace(
+          location: _chooseKey.currentState!.ori,
+          description: _chooseKey.currentState!.location1);
       originPlaceStream.increment(_originPlace);
       _originPlace!.location = _chooseKey.currentState!.ori;
     }
-    if ((_destinationPlace == null && _chooseKey.currentState != null && _chooseKey.currentState!.des != null) ||
+    if ((_destinationPlace == null &&
+            _chooseKey.currentState != null &&
+            _chooseKey.currentState!.des != null) ||
         (_destinationPlace != null && _chooseKey.currentState!.des != null)) {
-      _destinationPlace = WeMapPlace(location: _chooseKey.currentState!.des, description: _chooseKey.currentState!.location2);
+      _destinationPlace = WeMapPlace(
+          location: _chooseKey.currentState!.des,
+          description: _chooseKey.currentState!.location2);
       destinationPlaceStream.increment(_destinationPlace);
       _destinationPlace!.location = _chooseKey.currentState!.des;
     }
     if (_originPlace != null && _destinationPlace == null) {
-      await mapController?.animateCamera(CameraUpdate.newLatLngZoom(_originPlace!.location!, 18.0));
+      await mapController?.animateCamera(
+          CameraUpdate.newLatLngZoom(_originPlace!.location!, 18.0));
       mapController?.clearSymbols();
       mapController?.clearCircles();
-      await WeMapDirections().addCircle(_originPlace!.location!, mapController, '#d3d3d3');
+      await WeMapDirections()
+          .addCircle(_originPlace!.location!, mapController, '#d3d3d3');
 //      await WeMapDirections().addMarker(widget.originPlace.location, mapController, widget.originIcon);
 //      myLatLngEnabled = false;
     }
     if (_originPlace == null && _destinationPlace != null) {
-      await mapController?.animateCamera(CameraUpdate.newLatLngZoom(_destinationPlace!.location!, 18.0));
+      await mapController?.animateCamera(
+          CameraUpdate.newLatLngZoom(_destinationPlace!.location!, 18.0));
       mapController?.clearSymbols();
       mapController?.clearCircles();
-      await WeMapDirections().addMarker(_destinationPlace!.location, mapController, widget.destinationIcon);
+      await WeMapDirections().addMarker(
+          _destinationPlace!.location, mapController, widget.destinationIcon);
 //      myLatLngEnabled = false;
     }
     if (_originPlace != null && _destinationPlace != null) {
-      from = '${_originPlace!.location!.latitude},${_originPlace!.location!.longitude}';
-      to = '${_destinationPlace!.location!.latitude},${_destinationPlace!.location!.longitude}';
-      LatLngBounds bounds = WeMapDirections().routeBounds(_originPlace!.location!, _destinationPlace!.location!);
+      from =
+          '${_originPlace!.location!.latitude},${_originPlace!.location!.longitude}';
+      to =
+          '${_destinationPlace!.location!.latitude},${_destinationPlace!.location!.longitude}';
+      LatLngBounds bounds = WeMapDirections()
+          .routeBounds(_originPlace!.location!, _destinationPlace!.location!);
       await WeMapDirections().animatedCamera(mapController, bounds);
       mapController?.clearLines();
       mapController?.clearCircles();
 //      await WeMapDirections().addMarker(widget.originPlace.location, mapController, widget.originIcon);
-      await WeMapDirections().loadRoute(mapController!, _route, insRoute, rootPreview, visible, indexOfTab, from!, to!);
+      await WeMapDirections().loadRoute(mapController!, _route, insRoute,
+          rootPreview, visible, indexOfTab, from!, to!);
       mapController?.clearSymbols();
-      await WeMapDirections().addMarker(_destinationPlace!.location, mapController, widget.destinationIcon);
+      await WeMapDirections().addMarker(
+          _destinationPlace!.location, mapController, widget.destinationIcon);
 //      myLatLngEnabled = false;
-      if ((_originPlace?.description != wemap_yourLocation) && (_destinationPlace?.description != wemap_yourLocation)) {
+      if ((_originPlace?.description != wemap_yourLocation) &&
+          (_destinationPlace?.description != wemap_yourLocation)) {
         isDrivingStream.increment(false);
       }
     }
@@ -298,8 +374,11 @@ class WeMapDirectionState extends State<WeMapDirection> {
     distanceStream.increment(0);
     insRouteStream.increment(insRoute);
     indexStream.increment(0);
-    _originPlace = _originPlace;
-    _destinationPlace = _destinationPlace;
+
+    setState(() {
+      _originPlace = widget.originPlace;
+      _destinationPlace = widget.destinationPlace;
+    });
   }
 
   @override
@@ -314,7 +393,8 @@ class WeMapDirectionState extends State<WeMapDirection> {
         children: <Widget>[
           WeMap(
             onMapCreated: _onMapCreated,
-            initialCameraPosition: const CameraPosition(target: LatLng(21.03, 105.78), zoom: 15.0),
+            initialCameraPosition:
+                const CameraPosition(target: LatLng(21.03, 105.78), zoom: 15.0),
             onStyleLoadedCallback: onSelected,
             myLocationEnabled: myLatLngEnabled,
             compassEnabled: true,
@@ -339,12 +419,14 @@ class WeMapDirectionState extends State<WeMapDirection> {
                         flex: 2,
                         child: Container(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 55),
+                            padding: EdgeInsets.only(
+                                top: 0, left: 0, right: 0, bottom: 55),
                             child: IconButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                icon: Icon(Icons.arrow_back, color: Colors.black)),
+                                icon: Icon(Icons.arrow_back,
+                                    color: Colors.black)),
                           ),
                         ),
                       ),
@@ -352,15 +434,22 @@ class WeMapDirectionState extends State<WeMapDirection> {
                         flex: 12,
                         child: Container(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+                            padding: EdgeInsets.only(
+                                top: 0, left: 0, right: 0, bottom: 0),
                             child: ChooseLocation(
                               searchLocation: myLatLng,
-                              originPlace: _originPlace,
-                              destinationPlace: _destinationPlace,
+                              originPlace: widget.originPlace != null
+                                  ? widget.originPlace
+                                  : _originPlace,
+                              destinationPlace: widget.destinationPlace !=null
+                                  ? widget.destinationPlace
+                                  : _destinationPlace,
                               originIcon: widget.originIcon,
                               destinationIcon: widget.destinationIcon,
-                              onSelectOriginPlace: (place) => setState(() => _originPlace = place),
-                              onSelectDestinationPlace: (place) => setState(() => _destinationPlace = place),
+                              onSelectOriginPlace: (place) =>
+                                  setState(() => _originPlace = place),
+                              onSelectDestinationPlace: (place) =>
+                                  setState(() => _destinationPlace = place),
                               /*callback: (val) => setState(() => address = val),*/
                               key: _chooseKey,
                               onSelected: onSelected,
@@ -379,7 +468,8 @@ class WeMapDirectionState extends State<WeMapDirection> {
                                     padding: EdgeInsets.only(top: 10),
                                     child: PopupMenuButton<String>(
                                       onSelected: (value) {},
-                                      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                                      itemBuilder: (BuildContext context) =>
+                                          <PopupMenuItem<String>>[
                                         const PopupMenuItem<String>(
                                           value: 'Lưu',
                                           child: Text(routeShareText),
@@ -388,13 +478,16 @@ class WeMapDirectionState extends State<WeMapDirection> {
                                     ),
                                   )),
                               Padding(
-                                padding: EdgeInsets.only(top: 5, left: 0, right: 0, bottom: 0),
+                                padding: EdgeInsets.only(
+                                    top: 5, left: 0, right: 0, bottom: 0),
                                 child: IconButton(
                                   onPressed: () async {
                                     print(_originPlace?.toMap());
-                                    _chooseKey.currentState!.locationSwap(_originPlace!, _destinationPlace!);
+                                    _chooseKey.currentState!.locationSwap(
+                                        _originPlace!, _destinationPlace!);
                                   },
-                                  icon: Icon(Icons.swap_vert, color: Colors.black),
+                                  icon: Icon(Icons.swap_vert,
+                                      color: Colors.black),
                                 ),
                               ),
                             ],
@@ -412,15 +505,24 @@ class WeMapDirectionState extends State<WeMapDirection> {
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border(
-                                    bottom:
-                                        BorderSide(color: indexOfTab == 0 ? primaryColor : Colors.transparent, style: BorderStyle.solid, width: 2),
-                                    top: BorderSide(color: Colors.transparent, style: BorderStyle.solid, width: 2))),
+                                    bottom: BorderSide(
+                                        color: indexOfTab == 0
+                                            ? primaryColor
+                                            : Colors.transparent,
+                                        style: BorderStyle.solid,
+                                        width: 2),
+                                    top: BorderSide(
+                                        color: Colors.transparent,
+                                        style: BorderStyle.solid,
+                                        width: 2))),
                             child: CupertinoButton(
                                 pressedOpacity: 0.8,
                                 padding: EdgeInsets.all(0),
                                 child: Icon(
                                   Icons.directions_car,
-                                  color: indexOfTab == 0 ? primaryColor : Colors.blueGrey,
+                                  color: indexOfTab == 0
+                                      ? primaryColor
+                                      : Colors.blueGrey,
                                 ),
                                 onPressed: () async {
                                   setState(() {
@@ -428,58 +530,42 @@ class WeMapDirectionState extends State<WeMapDirection> {
                                   });
                                   if (from != null && to != null) {
                                     await mapController?.clearLines();
-                                    await WeMapDirections().loadRoute(mapController!, _route, insRoute, rootPreview, visible, indexOfTab, from!, to!);
+                                    await WeMapDirections().loadRoute(
+                                        mapController!,
+                                        _route,
+                                        insRoute,
+                                        rootPreview,
+                                        visible,
+                                        indexOfTab,
+                                        from!,
+                                        to!);
                                   }
                                 }),
                           ),
                         ),
-//                            Expanded(
-//                              flex: 1,
-//                              child: Container(
-//                                decoration: BoxDecoration(
-//                                    border: Border(
-//                                        bottom: BorderSide(
-//                                            color: indexOfTab == 1
-//                                                ? primaryColor
-//                                                : Colors.transparent,
-//                                            style: BorderStyle.solid,
-//                                            width: 2),
-//                                        top: BorderSide(
-//                                            color: Colors.transparent,
-//                                            style: BorderStyle.solid,
-//                                            width: 2))),
-//                                child: CupertinoButton(
-//                                    pressedOpacity: 0.8,
-//                                    padding: EdgeInsets.all(0),
-//                                    child: Icon(
-//                                      Icons.motorcycle,
-//                                      color: indexOfTab == 1
-//                                          ? primaryColor
-//                                          : Colors.blueGrey,
-//                                    ),
-//                                    onPressed: () async {
-//                                      setState(() {
-//                                        indexOfTab = 1;
-//                                      });
-//                                      await mapController.clearLines();
-//                                      await WeMapDirections().loadRoute(mapController, _route, insRoute, rootPreview, visible, indexOfTab, from, to);
-//                                    }),
-//                              ),
-//                            ),
                         Expanded(
                           flex: 1,
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border(
-                                    bottom:
-                                        BorderSide(color: indexOfTab == 1 ? primaryColor : Colors.transparent, style: BorderStyle.solid, width: 2),
-                                    top: BorderSide(color: Colors.transparent, style: BorderStyle.solid, width: 2))),
+                                    bottom: BorderSide(
+                                        color: indexOfTab == 1
+                                            ? primaryColor
+                                            : Colors.transparent,
+                                        style: BorderStyle.solid,
+                                        width: 2),
+                                    top: BorderSide(
+                                        color: Colors.transparent,
+                                        style: BorderStyle.solid,
+                                        width: 2))),
                             child: CupertinoButton(
                                 pressedOpacity: 0.8,
                                 padding: EdgeInsets.all(0),
                                 child: Icon(
                                   Icons.directions_bike,
-                                  color: indexOfTab == 1 ? primaryColor : Colors.blueGrey,
+                                  color: indexOfTab == 1
+                                      ? primaryColor
+                                      : Colors.blueGrey,
                                 ),
                                 onPressed: () async {
                                   setState(() {
@@ -487,7 +573,15 @@ class WeMapDirectionState extends State<WeMapDirection> {
                                   });
                                   if (from != null && to != null) {
                                     await mapController?.clearLines();
-                                    await WeMapDirections().loadRoute(mapController!, _route, insRoute, rootPreview, visible, indexOfTab, from!, to!);
+                                    await WeMapDirections().loadRoute(
+                                        mapController!,
+                                        _route,
+                                        insRoute,
+                                        rootPreview,
+                                        visible,
+                                        indexOfTab,
+                                        from!,
+                                        to!);
                                   }
                                 }),
                           ),
@@ -497,20 +591,38 @@ class WeMapDirectionState extends State<WeMapDirection> {
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border(
-                                    bottom:
-                                        BorderSide(color: indexOfTab == 2 ? primaryColor : Colors.transparent, style: BorderStyle.solid, width: 2),
-                                    top: BorderSide(color: Colors.transparent, style: BorderStyle.solid, width: 2))),
+                                    bottom: BorderSide(
+                                        color: indexOfTab == 2
+                                            ? primaryColor
+                                            : Colors.transparent,
+                                        style: BorderStyle.solid,
+                                        width: 2),
+                                    top: BorderSide(
+                                        color: Colors.transparent,
+                                        style: BorderStyle.solid,
+                                        width: 2))),
                             child: CupertinoButton(
                                 pressedOpacity: 0.8,
                                 padding: EdgeInsets.all(0),
-                                child: Icon(Icons.directions_walk, color: indexOfTab == 2 ? primaryColor : Colors.blueGrey),
+                                child: Icon(Icons.directions_walk,
+                                    color: indexOfTab == 2
+                                        ? primaryColor
+                                        : Colors.blueGrey),
                                 onPressed: () async {
                                   setState(() {
                                     indexOfTab = 2;
                                   });
                                   if (from != null && to != null) {
                                     await mapController?.clearLines();
-                                    await WeMapDirections().loadRoute(mapController!, _route, insRoute, rootPreview, visible, indexOfTab, from!, to!);
+                                    await WeMapDirections().loadRoute(
+                                        mapController!,
+                                        _route,
+                                        insRoute,
+                                        rootPreview,
+                                        visible,
+                                        indexOfTab,
+                                        from!,
+                                        to!);
                                   }
                                 }),
                           ),
